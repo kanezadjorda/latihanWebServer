@@ -2,6 +2,7 @@
 	"name": "notes-app-back-end",
 	"version": "1.0.0",
 	"main": "index.js",
+	"type": "commonjs",
 	"scripts": {
 		"start": "nodemon ./src/server.js",
 		"lint": "eslint ./"
