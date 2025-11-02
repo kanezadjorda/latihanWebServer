@@ -6,11 +6,24 @@ const init = async () => {
     // eslint-disable-next-line no-undef
     port: process.env.PORT || 5000,
     host: '0.0.0.0',
-    routes: {
-      cors: {
-        origin: ['*'],
-      },
-    },
+  });
+
+  server.ext('onPreResponse', (request, h) => {
+    const response = request.response;
+
+    if (response.isBoom) {
+      response.output.headers['access-control-allow-origin'] = '*';
+      response.output.headers['access-control-allow-credentials'] = 'true';
+      response.output.headers['access-control-allow-methods'] = 'GET, POST, PUT, DELETE, OPTIONS';
+      response.output.headers['access-control-allow-headers'] = 'Content-Type, Authorization';
+    } else {
+      response.header('access-control-allow-origin', '*');
+      response.header('access-control-allow-credentials', 'true');
+      response.header('access-control-allow-methods', 'GET, POST, PUT, DELETE, OPTIONS');
+      response.header('access-control-allow-headers', 'Content-Type, Authorization');
+    }
+
+    return h.continue;
   });
 
   server.route(routers);
